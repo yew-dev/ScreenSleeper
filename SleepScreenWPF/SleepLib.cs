@@ -16,6 +16,10 @@ namespace SleepScreenWPF { // monitor_on_off {
         [DllImport("user32.dll")]
         static extern void mouse_event(Int32 dwFlags, Int32 dx, Int32 dy, Int32 dwData, UIntPtr dwExtraInfo);
 
+        [DllImport("Powrprof.dll", SetLastError = true)]
+        static extern bool SetSuspendState(bool hibernate, bool forceCritical, bool disableWakeEvent);
+
+
         private const int WmSyscommand = 0x0112;
         private const int ScMonitorpower = 0xF170;
         private const int MonitorShutoff = 2;
@@ -23,6 +27,7 @@ namespace SleepScreenWPF { // monitor_on_off {
 
         public static void MonitorOff(IntPtr handle) {
             SendMessage(handle, WmSyscommand, (IntPtr)ScMonitorpower, (IntPtr)MonitorShutoff);
+            SetSuspendState(false, false, false);
         }
 
         public static void MonitorOn() {
